@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    nav 
+      a.app-title(href='/') Secret Club
+      if !user 
+        a(href='/user/sign_up') Sign Up 
+        a(href='/user/log_in') Log In
+      else if user.status==='new'
+        a(href='/user/insider') Become Insider 
+        a(href='/message/new_message') New Message 
+        a(href='/user/log_out') Log Out 
+      else if user.status==='insider'
+        a(href='/user/admin') Become Admin 
+        a(href='/message/new_message') New Message 
+        a(href='/user/log_out') Log Out 
+      else 
+        a(href='/message/new_message') New Message 
+        a(href='/user/log_out') Log Out
+    block content
