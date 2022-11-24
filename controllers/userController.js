@@ -2,6 +2,7 @@ const User = require('../models/user');
 const Message = require('../models/message');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
+const passport = require('passport');
 
 exports.sign_up_get = function (req, res, next) {
   res.render('sign_up_form', {
@@ -68,8 +69,17 @@ exports.log_in_get = function (req, res, next) {
   });
 };
 
-exports.log__in_post = function (req, res, next) {};
-
+exports.log_in_post = [
+  passport.authenticate('local', {
+    failureRedirect: '/user/log_in',
+    failureMessage: true,
+  }),
+  (req, res) => {
+    res.render('index', {
+      user: res.locals.currentUser,
+    });
+  },
+];
 exports.insider_get = function (req, res, next) {};
 
 exports.insider_post = function (req, res, next) {};
@@ -78,4 +88,11 @@ exports.admin_get = function (req, res, next) {};
 
 exports.admin_post = function (req, res, next) {};
 
-exports.log_out = function (req, res, next) {};
+exports.log_out = function (req, res, next) {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/');
+  });
+};

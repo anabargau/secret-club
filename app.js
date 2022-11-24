@@ -38,9 +38,11 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(passport.authenticate('session'));
 
 passport.use(
   new LocalStrategy((username, password, done) => {
+    console.log('strategy');
     User.findOne({ username: username }, (err, user) => {
       if (err) {
         return done(err);
@@ -58,10 +60,12 @@ passport.use(
     });
   })
 );
+
 passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
-passport.deserializeUser(function (user, done) {
+
+passport.deserializeUser(function (id, done) {
   User.findById(id, function (err, user) {
     done(err, user);
   });
