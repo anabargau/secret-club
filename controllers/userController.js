@@ -68,11 +68,68 @@ exports.log_in_get = function (req, res, next) {
   res.render('log_in_form');
 };
 
-exports.log_in_post = passport.authenticate('local', {
-  failureRedirect: '/user/log_in',
-  failureMessage: true,
-  successRedirect: '/',
-});
+exports.log_in_post = [
+  body('username')
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage('Username is required')
+    .custom((value, { req }) => {
+      return new Promise((resolve, reject) => {
+        User.findOne({ username: value }, (err, user) => {
+          if (err) {
+            reject(new Error('Server Error'));
+          }
+          if (!user) {
+            reject(new Error('User does not exist'));
+          }
+          resolve(true);
+        });
+      });
+    }),
+  body('password')
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage('Password is required')
+    .custom((value, { req }) => {
+      return new Promise((resolve, reject) => {
+        User.findOne({ username: req.body.username }, async (err, user) => {
+          if (err) {
+            reject(new Error('Server error'));
+          }
+          if (user) {
+            const result = bcrypt.compareSync(
+              value,
+              user.password,
+              (error, result) => {
+                if (error) {
+                  reject(new Error('Server error'));
+                }
+              }
+            );
+            if (!result) {
+              reject(new Error('Invalid password'));
+            }
+          }
+          resolve(true);
+        });
+      });
+    }),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.render('log_in_form', {
+        errors: errors.array(),
+        username: req.body.username,
+      });
+      return;
+    }
+    next();
+  },
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/user/log_in',
+  }),
+];
 
 exports.insider_get = function (req, res, next) {
   if (!res.locals.currentUser) {
