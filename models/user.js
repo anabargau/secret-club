@@ -7,7 +7,7 @@ const userSchema = new Schema({
   membership_status: {
     type: String,
     required: true,
-    enum: ['new', 'inside', 'admin'],
+    enum: ['new', 'insider', 'admin'],
   },
 });
 

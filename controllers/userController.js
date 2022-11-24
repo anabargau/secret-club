@@ -3,6 +3,7 @@ const Message = require('../models/message');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
+require('dotenv').config();
 
 exports.sign_up_get = function (req, res, next) {
   res.render('sign_up_form', {
@@ -57,7 +58,7 @@ exports.sign_up_post = [
         if (err) {
           return next(err);
         }
-        res.redirect('/');
+        res.redirect('/user/log_in');
       });
     });
   },
@@ -69,24 +70,101 @@ exports.log_in_get = function (req, res, next) {
   });
 };
 
-exports.log_in_post = [
-  passport.authenticate('local', {
-    failureRedirect: '/user/log_in',
-    failureMessage: true,
-  }),
-  (req, res) => {
+exports.log_in_post = passport.authenticate('local', {
+  failureRedirect: '/user/log_in',
+  failureMessage: true,
+  successRedirect: '/',
+});
+
+exports.insider_get = function (req, res, next) {
+  if (!res.locals.currentUser) {
+    return res.redirect('/log_in_form');
+  }
+  res.render('passcode_form', {
+    title: 'Become an insider member',
+    user: res.locals.currentUser,
+  });
+};
+
+exports.insider_post = [
+  body('passcode', 'Please enter your passcode')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.render('passcode_form', {
+        title: 'Become an insider member',
+        user: res.locals.currentUser,
+        errors: errors.array(),
+      });
+      return;
+    }
+    if (req.body.passcode !== process.env.INSIDER_SECRET) {
+      res.render('passcode_form', {
+        title: 'Become an insider member',
+        user: res.locals.currentUser,
+        errors: [{ msg: 'Incorrect passcode' }],
+      });
+      return;
+    }
+    const user = new User(res.locals.currentUser);
+    user.membership_status = 'insider';
+    User.findByIdAndUpdate(res.locals.currentUser._id, user, {}, (err) => {
+      return next(err);
+    });
     res.render('index', {
-      user: res.locals.currentUser,
+      user: user,
     });
   },
 ];
-exports.insider_get = function (req, res, next) {};
 
-exports.insider_post = function (req, res, next) {};
+exports.admin_get = function (req, res, next) {
+  if (!res.locals.currentUser) {
+    return res.redirect('/log_in_form');
+  }
+  res.render('passcode_form', {
+    title: 'Become an admin',
+    user: res.locals.currentUser,
+  });
+};
 
-exports.admin_get = function (req, res, next) {};
-
-exports.admin_post = function (req, res, next) {};
+exports.admin_post = [
+  body('passcode', 'Please enter your passcode')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.render('passcode_form', {
+        title: 'Become an admin',
+        errors: errors.array(),
+        user: res.locals.currentUser,
+      });
+      return;
+    }
+    if (req.body.passcode !== process.env.ADMIN_SECRET) {
+      res.render('passcode_form', {
+        title: 'Become an admin',
+        user: res.locals.currentUser,
+        errors: [{ msg: 'Incorrect passcode' }],
+      });
+      return;
+    }
+    const user = new User(res.locals.currentUser);
+    user.membership_status = 'admin';
+    User.findByIdAndUpdate(res.locals.currentUser._id, user, {}, (err) => {
+      if (err) {
+        return next(err);
+      }
+      res.render('index', {
+        user,
+      });
+    });
+  },
+];
 
 exports.log_out = function (req, res, next) {
   req.logout(function (err) {
