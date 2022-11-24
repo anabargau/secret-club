@@ -1,7 +1,18 @@
 extends layout
 
 block content
-  if user 
-    div Hello, #{user.username}
+  if messages.length > 0
+    ul 
+      for message in messages
+        li
+          div #{message.title}
+          div #{message.text}
+          if user && user.membership_status!='new'
+            div #{message.author.username}
+            div #{message.date_formatted}
+          else 
+            div Anonymous 
+          if user && user.membership_status=='admin'
+            a(href='/message/delete/' + message._id) #[button(type='submit') Delete message]
   else 
-    div Hello, stranger
+    h1 There are no messages to display yet

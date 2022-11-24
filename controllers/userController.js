@@ -65,9 +65,7 @@ exports.sign_up_post = [
 ];
 
 exports.log_in_get = function (req, res, next) {
-  res.render('log_in_form', {
-    title: 'Log In',
-  });
+  res.render('log_in_form');
 };
 
 exports.log_in_post = passport.authenticate('local', {
@@ -114,9 +112,7 @@ exports.insider_post = [
     User.findByIdAndUpdate(res.locals.currentUser._id, user, {}, (err) => {
       return next(err);
     });
-    res.render('index', {
-      user: user,
-    });
+    res.redirect('/');
   },
 ];
 
@@ -159,9 +155,7 @@ exports.admin_post = [
       if (err) {
         return next(err);
       }
-      res.render('index', {
-        user,
-      });
+      res.redirect('/');
     });
   },
 ];

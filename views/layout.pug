@@ -11,13 +11,13 @@ html
         a(href='/user/log_in') Log In
       else if user.membership_status=='new'
         a(href='/user/insider') Become an Insider 
-        a(href='/message/new_message') New Message 
+        a(href='/message/new') New Message 
         a(href='/user/log_out') Log Out 
       else if user.membership_status=='insider'
         a(href='/user/admin') Become Admin 
-        a(href='/message/new_message') New Message 
+        a(href='/message/new') New Message 
         a(href='/user/log_out') Log Out 
       else 
-        a(href='/message/new_message') New Message 
+        a(href='/message/new') New Message 
         a(href='/user/log_out') Log Out
     block content
