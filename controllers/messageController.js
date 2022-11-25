@@ -22,7 +22,9 @@ exports.new_message_get = function (req, res, next) {
   if (!res.locals.currentUser) {
     return res.render('log_in_form');
   }
-  res.render('message_form');
+  res.render('message_form', {
+    user: res.locals.currentUser,
+  });
 };
 
 exports.new_message_post = [
@@ -70,6 +72,7 @@ exports.delete_message_get = function (req, res, next) {
       }
       res.render('delete_message', {
         message,
+        user: res.locals.currentUser,
       });
     });
 };

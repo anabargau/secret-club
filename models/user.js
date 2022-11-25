@@ -9,6 +9,7 @@ const userSchema = new Schema({
     required: true,
     enum: ['new', 'insider', 'admin'],
   },
+  avatar: { type: String, required: true, enum: ['dog', 'lion', 'panda'] },
 });
 
 module.exports = mongoose.model('User', userSchema);

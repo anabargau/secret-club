@@ -45,6 +45,7 @@ exports.sign_up_post = [
         username: req.body.username,
         password: hash_password,
         membership_status: 'new',
+        avatar: req.body.avatar,
       });
       if (!errors.isEmpty()) {
         res.render('sign_up_form', {
@@ -54,11 +55,16 @@ exports.sign_up_post = [
         });
         return;
       }
-      user.save((err) => {
+      user.save((err, saved_user) => {
         if (err) {
           return next(err);
         }
-        res.redirect('/user/log_in');
+        req.login(saved_user, (err) => {
+          if (err) {
+            return next(err);
+          }
+          res.redirect('/');
+        });
       });
     });
   },
@@ -167,7 +173,9 @@ exports.insider_post = [
     const user = new User(res.locals.currentUser);
     user.membership_status = 'insider';
     User.findByIdAndUpdate(res.locals.currentUser._id, user, {}, (err) => {
-      return next(err);
+      if (err) {
+        return next(err);
+      }
     });
     res.redirect('/');
   },

@@ -1,16 +1,19 @@
 extends layout
 
 block content 
-  h1 Add a new message 
+  div.form-content
+    h1.form-title Add a new message 
 
-  form(action='' method='post')
-    label(for='title') Title:
-    input#title(type='text' required=true name='title' value=(message ? message.title : '') autofocus)
-    label(for='text') Content: 
-    input#text(type='text' required=true name='text' value=(message ? message.text : ''))
-    button(type="submit") Add
+    form(action='' method='post').passcode-form
+      div.form-group
+        label(for='title') Title:
+        input#title(type='text' required=true name='title' value=(message ? message.title : '') autofocus)
+      div.form-group
+        label(for='text') Content: 
+        input#text(type='text' required=true name='text' value=(message ? message.text : ''))
+      button(type="submit").submit-btn Add
 
-  if errors 
-    ul
-    for error in errors
-      li!=error.msg
+    if errors 
+      ul
+      for error in errors
+        li!=error.msg

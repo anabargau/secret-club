@@ -1,16 +1,32 @@
 extends layout 
 
 block content 
-  div #{title}
-  form(action='' method='POST')
-    label(for='usernama') Username: 
-    input#username(type='text' required=true name='username' value=(user ? user.username : '' ) autofocus)
-    label(for='password') Password:
-    input#password(type='password' required=true name='password')
-    label(for='confirm-password') Confirm Password:
-    input#confirm-password(type='password' required=true name='confirm_password')
-    button(type='submit') Sign Up
-  if errors 
-    ul 
-      for error in errors
-        li!= error.msg
+  div.form-content
+    h1.form-title #{title}
+    form(action='' method='POST').passcode-form
+      div.form-group
+        label(for='usernama') Username: 
+        input#username(type='text' required=true name='username' value=(user ? user.username : '' ) autofocus)
+      div.form-group
+        label(for='password') Password:
+        input#password(type='password' required=true name='password')
+      div.form-group
+        label(for='confirm-password') Confirm Password:
+        input#confirm-password(type='password' required=true name='confirm_password')
+      fieldset 
+        legend Select an avatar: 
+        div.avatar-select 
+          input#dog(type='radio' name='avatar' value='dog' checked=true)
+          label.avatar-label.dog(for='dog')
+
+          input#lion(type='radio' name='avatar' value='lion')
+          label.avatar-label.lion(for='lion')
+
+          input#panda(type='radio' name='avatar' value='panda')
+          label.avatar-label.panda(for='panda')
+
+      button(type='submit').submit-btn Sign Up
+    if errors 
+      ul 
+        for error in errors
+          li!= error.msg

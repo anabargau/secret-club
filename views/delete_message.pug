@@ -2,14 +2,19 @@ extends layout
 
 block content  
 
-  h1 Are you sure you want to delete this message?
+  h1.form-title Are you sure you want to delete this message?
   
-  div #{message.title}
-  div #{message.text}
-  div #{message.author.username}
-  div #{message.formatted_date}
+  div.delete-message
+    div.message-wall-header
+      img(src=('/images/' + message.author.avatar + '-user.png'))
+      div.message-wall-title #{message.title}
+    div #{message.text}
+    div.message-wall-author
+      div.message-wall-username #{message.author.username},
+      div.message-wall-date #{message.date_formatted}
 
   form(method='post' action='')
     input(type='hidden' name='messageid' required=true value=message._id)
-    button(type='submit') Delete
-    a(href='/') #[button(type='button') Cancel]
+    div.delete-btns
+      button.submit-btn(type='submit') Delete
+      a(href='/') #[button.submit-btn(type='button') Cancel]

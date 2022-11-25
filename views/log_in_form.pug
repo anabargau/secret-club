@@ -1,15 +1,18 @@
 extends layout 
 
 block content 
-  h1 Log In
-  form(method='POST' action='/user/log_in')
-    label(for='username') Username:
-    input#username(type='text' name='username' required=true autofocus value=(username ? username : ''))
-    label(for='password') Password:
-    input#password(type='password' name='password' required=true autofocus)
-    button(type='submit') Log In
+  div.form-content
+    h1.form-title Log In
+    form(method='POST' action='/user/log_in').passcode-form
+      div.form-group
+        label(for='username') Username:
+        input#username(type='text' name='username' required=true autofocus value=(username ? username : ''))
+      div.form-group
+        label(for='password') Password:
+        input#password(type='password' name='password' required=true autofocus)
+      button(type='submit').submit-btn Log In
 
-  if errors 
-    ul 
-      for error in errors
-        li!= error.msg
+    if errors 
+      ul 
+        for error in errors
+          li!= error.msg

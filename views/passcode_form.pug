@@ -1,13 +1,15 @@
 extends layout
 
 block content 
-  h1 #{title}
-  form(method='post' action='')
-    label(for='passcode') Insert the passcode: 
-    input(type='password' name='passcode' autofocus)
-    button(type='submit') Submit
-  
-  if errors 
-    ul 
-      for error in errors
-        li!= error.msg
+  div.form-content
+    h1.form-title #{title}
+    form(method='post' action='').passcode-form
+      div.form-group
+        label(for='passcode') Insert the passcode: 
+        input(type='password' name='passcode' autofocus)
+        button(type='submit').submit-btn Submit
+    
+    if errors 
+      ul 
+        for error in errors
+          li!= error.msg

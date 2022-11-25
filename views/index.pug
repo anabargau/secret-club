@@ -2,17 +2,22 @@ extends layout
 
 block content
   if messages.length > 0
-    ul 
-      for message in messages
-        li
-          div #{message.title}
-          div #{message.text}
-          if user && user.membership_status!='new'
-            div #{message.author.username}
-            div #{message.date_formatted}
-          else 
-            div Anonymous 
-          if user && user.membership_status=='admin'
-            a(href='/message/delete/' + message._id) #[button(type='submit') Delete message]
+    div.message-wall-container
+      ul.message-wall-list
+        for message in messages
+          li.message-wall-message
+            div.message-wall-header
+              img(src=(user && user.membership_status != 'new' ? '/images/' + message.author.avatar + '-user.png' : '/images/anonymous.png'))
+              div.message-wall-title #{message.title}
+            div.message-wall-text #{message.text}
+            div.message-wall-author
+              if user && user.membership_status !== 'new'
+                div.message-wall-username #{message.author.username},
+                div.message-wall-date #{message.date_formatted}
+              else 
+                div.message-wall-username Anonymous 
+        
+              if user && user.membership_status=='admin'
+                a(href='/message/delete/' + message._id) #[img.delete-img(src='/images/delete.png')]
   else 
-    h1 There are no messages to display yet
+    h1.no-message-text There are no messages to display yet
