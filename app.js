@@ -1,10 +1,10 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
-require('dotenv').config();
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -14,8 +14,7 @@ const userRouter = require('./routes/userRouter.js');
 const messageRouter = require('./routes/messageRouter.js');
 const indexRouter = require('./routes/index.js');
 
-const mongoDB =
-  'mongodb+srv://secret-club:ultra-secret-club@cluster0.vnhxtb3.mongodb.net/?retryWrites=true&w=majority';
+const mongoDB = process.env.MONGODB_URI;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
