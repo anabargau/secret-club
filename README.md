@@ -7,4 +7,4 @@ password for insider membership: **apple**
 
 to become admin: **pear**
 
-**Check it out [here](https://serene-shelf-98749.herokuapp.com/message/message_list).**
+**Check it out [here](https://secret-club-production.up.railway.app).**
