@@ -138,7 +138,7 @@ exports.log_in_post = [
 
 exports.insider_get = function (req, res, next) {
   if (!res.locals.currentUser) {
-    return res.redirect('/log_in_form');
+    return res.redirect('/user/log_in');
   }
   res.render('passcode_form', {
     title: 'Become an insider member',
