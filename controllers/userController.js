@@ -182,7 +182,7 @@ exports.insider_post = [
 
 exports.admin_get = function (req, res, next) {
   if (!res.locals.currentUser) {
-    return res.redirect('/log_in_form');
+    return res.render('/log_in_form');
   }
   res.render('passcode_form', {
     title: 'Become an admin',
