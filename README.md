@@ -10,6 +10,7 @@ At first you will be able to see the messages, but won't be able to see who the 
 But after signing up and becoming an insider, you will also be able to see who wrote the message.
 
 https://github.com/user-attachments/assets/b9bf6e5a-7d9f-46c0-9ef9-9f1f3833dc45
+
 https://github.com/user-attachments/assets/de7f7338-2718-444f-bbdc-bebd10ff58e7
 
 Also, you will be able to add your own message.
